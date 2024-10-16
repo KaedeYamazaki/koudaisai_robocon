@@ -5,12 +5,6 @@
 /*define*/
 #define LEDC_CHANNEL_0 0
 #define LEDC_CHANNEL_1 1
-#define LEDC_CHANNEL_2 2
-#define LEDC_CHANNEL_3 3
-#define LEDC_CHANNEL_4 4
-#define LEDC_CHANNEL_5 5
-#define LEDC_CHANNEL_6 6
-#define LEDC_CHANNEL_7 7
 
 #define LEDC_Operating_timeR_BIT 8 // 今回はデューティ―比を8bit（0~255）で表す
 #define LEDC_BASE_FREQ 490
@@ -44,12 +38,6 @@ void setup()
 
     ledcSetup(LEDC_CHANNEL_0, LEDC_BASE_FREQ, LEDC_Operating_timeR_BIT);
     ledcSetup(LEDC_CHANNEL_1, LEDC_BASE_FREQ, LEDC_Operating_timeR_BIT);
-    ledcSetup(LEDC_CHANNEL_2, LEDC_BASE_FREQ, LEDC_Operating_timeR_BIT);
-    ledcSetup(LEDC_CHANNEL_3, LEDC_BASE_FREQ, LEDC_Operating_timeR_BIT);
-    ledcSetup(LEDC_CHANNEL_4, LEDC_BASE_FREQ, LEDC_Operating_timeR_BIT);
-    ledcSetup(LEDC_CHANNEL_5, LEDC_BASE_FREQ, LEDC_Operating_timeR_BIT);
-    ledcSetup(LEDC_CHANNEL_6, LEDC_BASE_FREQ, LEDC_Operating_timeR_BIT);
-    ledcSetup(LEDC_CHANNEL_7, LEDC_BASE_FREQ, LEDC_Operating_timeR_BIT);
 
     ledcAttachPin(M1_pwm, LEDC_CHANNEL_0);
     ledcAttachPin(M2_pwm, LEDC_CHANNEL_1);

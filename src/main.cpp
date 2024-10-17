@@ -2,8 +2,8 @@
 #include <Arduino.h>
 #include <PS4Controller.h>
 
+#include "chassis_driver.hpp"
 #include "config.hpp"
-#include "motor_driver.hpp"
 
 /* Define */
 static const int indicator = 27;
@@ -23,17 +23,16 @@ motor_driver::MotorDriverConfig left_motor_config(config::pwm_resulution_bit, co
 motor_driver::MotorDriver right_motor_driver(right_motor_config);
 motor_driver::MotorDriver left_motor_driver(left_motor_config);
 
+chassis_driver::ChassisDriver chassis(left_motor_driver, right_motor_driver);
+
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(config::serial_baudrate);
     Serial.println("start setup");
 
-    // motor setup
-    Serial.println("motor setup");
-    Serial.println("right motor setup");
-    right_motor_driver.setup();
-    right_motor_driver.rev(true);
-    Serial.println("left motor setup");
-    left_motor_driver.setup();
+    // setup
+    chassis.setup();
+    left_motor_driver.rev(config::left_motor_rev);
+    right_motor_driver.rev(config::righr_motor_rev);
 
     pinMode(indicator, OUTPUT);
 
@@ -52,17 +51,12 @@ void loop() {
         if (abs(R) <= 15) R = 0;
         if (abs(L) <= 15) L = 0;
 
-        if (L != 0 || R != 0) {
-            left_duty = static_cast<float>(L / INT8_MAX);
-            right_duty = static_cast<float>(R / INT8_MAX);
-            left_motor_driver.drive(left_duty);
-            right_motor_driver.drive(right_duty);
-        } else {
-            left_motor_driver.brake();
-            right_motor_driver.brake();
-        }
+        left_duty = static_cast<float>(L / INT8_MAX);
+        right_duty = static_cast<float>(R / INT8_MAX);
+        left_motor_driver.drive(left_duty);
+        right_motor_driver.drive(right_duty);
 
-        #ifdef DEBUG
+#ifdef DEBUG
         Serial.print("L: ");
         Serial.print(L);
         Serial.print(" R: ");
@@ -73,7 +67,7 @@ void loop() {
         Serial.print(left_duty);
         Serial.print(" right_duty: ");
         Serial.println(right_duty);
-        #endif
+#endif
     } else {
         Serial.println("PS4 controller is not connected");
         digitalWrite(indicator, LOW);

@@ -2,10 +2,15 @@
 #include "robot_controller.hpp"
 
 namespace robot {
-RobotController::RobotController(const std::string &controller_mac, robot::Robot &robot)
-    : controller_mac_(controller_mac), robot_(robot), state_(RobotState::setup), bucket_value_count_(0) {};
+RobotController::RobotController(const std::string &controller_mac, robot::Robot &robot, const uint8_t doi_led_pin)
+    : controller_mac_(controller_mac),
+      robot_(robot),
+      doi_led_pin_(doi_led_pin),
+      state_(RobotState::setup),
+      bucket_value_count_(0) {};
 
 int RobotController::setup() {
+    pinMode(doi_led_pin_, OUTPUT);
     int i = 0;
     i += robot_.setup();
     i += PS4.begin(controller_mac_.c_str());
@@ -14,6 +19,7 @@ int RobotController::setup() {
 
 void RobotController::cycle() {
     if (PS4.isConnected()) {
+        digitalWrite(doi_led_pin_, HIGH);
         if (PS4.Options()) {
             Serial.println("set standby mode");
             state_ = RobotState::standby;
@@ -47,6 +53,7 @@ void RobotController::cycle() {
             return;
         }
     } else {
+        digitalWrite(doi_led_pin_, LOW);
         Serial.println("controller not connected");
     }
 }

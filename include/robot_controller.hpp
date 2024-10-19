@@ -12,7 +12,7 @@ enum class RobotState {
 
 class RobotController {
 public:
-    RobotController(const std::string &controller_mac, robot::Robot &robot);
+    RobotController(const std::string &controller_mac, robot::Robot &robot, const uint8_t doi_led_pin);
     int setup();
     void cycle();
 
@@ -21,6 +21,7 @@ private:
     robot::Robot &robot_;
     robot::RobotState state_;
     int bucket_value_count_;
+    uint8_t doi_led_pin_;
 
     void semi_auto();
     void manual();

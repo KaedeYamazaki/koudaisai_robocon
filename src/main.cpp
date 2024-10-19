@@ -17,12 +17,6 @@
 
 #define DEBUG false
 
-// SoftwareSerial maestroSerial(0, 1);
-static const int indicator = 27;
-
-float left_duty = 0;
-float right_duty = 0;
-
 // motor setup
 motor_driver::MotorDriverConfig right_motor_config(config::pwm_resulution_bit, config::pwm_frequency,
                                                    config::right_motor_pwm_controller_channel,
@@ -67,7 +61,8 @@ bucket::BucketConfig bucket_config(config::bucket::scoop_angle, config::bucket::
 bucket::Bucket bucket_arm(bucket_servo, bucket_config);
 
 robot::Robot ibonoito(chassis, arm_driver, bucket_arm);
-robot::RobotController ibonoito_controller(static_cast<std::string>(config::serial::ps4_controller_mac), ibonoito);
+robot::RobotController ibonoito_controller(static_cast<std::string>(config::serial::ps4_controller_mac), ibonoito,
+                                           config::doi_led_pin);
 
 void setup() {
     Serial.begin(config::serial::baudrate);
@@ -82,8 +77,7 @@ void setup() {
 
     left_motor_driver.rev(config::left_motor_rev);
     right_motor_driver.rev(config::righr_motor_rev);
-    
-    pinMode(indicator, OUTPUT);
+
     delay(100);
 }
 

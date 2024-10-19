@@ -22,6 +22,7 @@ private:
     robot::RobotState state_;
     int bucket_value_count_;
     uint8_t doi_led_pin_;
+    const float slow_down_{0.3f};
 
     void semi_auto();
     void manual();

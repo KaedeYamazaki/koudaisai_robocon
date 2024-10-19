@@ -132,6 +132,7 @@ void RobotController::manual() {
 }
 
 void RobotController::drive() {
+    auto R1 = PS4.R1();
     int L = PS4.LStickY();
     int R = PS4.RStickY();
 
@@ -141,8 +142,13 @@ void RobotController::drive() {
     float left_duty;
     float right_duty;
 
-    left_duty = static_cast<float>(L) / INT8_MAX;
-    right_duty = static_cast<float>(R) / INT8_MAX;
+    if (R1) {
+        left_duty = slow_down_ * (static_cast<float>(L) / INT8_MAX);
+        right_duty = slow_down_ * (static_cast<float>(R) / INT8_MAX);
+    } else {
+        left_duty = slow_down_ * (static_cast<float>(L) / INT8_MAX);
+        right_duty = slow_down_ * (static_cast<float>(R) / INT8_MAX);
+    }
 
     robot_.drive(left_duty, right_duty);
 }

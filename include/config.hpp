@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdint>
 #include <string>
 
@@ -27,20 +29,41 @@ static constexpr bool righr_motor_rev = true;
 
 static constexpr uint8_t doi_led_pin = 27;
 
-static constexpr uint16_t servo_target_min = 4 * 800;
-static constexpr uint16_t servo_target_max = 4 * 3200;
-static constexpr uint16_t servo_target_neutral = 4 * 2000;
+namespace servo_motor {
+    static constexpr uint16_t target_min = 4 * 500;
+    static constexpr uint16_t target_max = 4 * 2500;
 
-static constexpr uint16_t servo_range_deg = 270; // 0 to 270 degree
+    static constexpr uint16_t servo_range_deg = 270;  // 0 to 270 degree
 
-static constexpr uint8_t left_arm_channel = 0;
-static constexpr uint8_t right_arm_channel = 1;
+    static constexpr float deg_per_target = servo_range_deg / (target_max - target_min);
 
-static constexpr uint8_t left_arm_target_offset = 0;
-static constexpr uint8_t right_arm_target_offset = 0;
+    static constexpr uint16_t target_neutral = 4 * 2000;
 
-static constexpr bool left_arm_rev = false;
-static constexpr bool right_arm_rev = false;
+    namespace left {
+        static constexpr uint8_t channel = 0;
+        static constexpr uint16_t target_min = 4 * 1100;
+        static constexpr uint16_t target_max = 4 * 2200;
+        static constexpr int target_offset = 0;
+        static constexpr bool rev = false;
+    }  // namespace left
+
+    namespace right {
+        static constexpr uint8_t channel = 1;
+        static constexpr uint16_t target_min = 4 * 496;
+        static constexpr uint16_t target_max = 4 * 1700;
+        static constexpr int target_offset = 0;
+        static constexpr bool rev = true;
+    }  // namespace right
+
+    namespace bucket {
+        static constexpr uint8_t channel = 2;
+        static constexpr uint16_t target_min = 4 * 1389;
+        static constexpr uint16_t target_max = 4 * 2500;
+        static constexpr int target_offset = 0;
+        static constexpr bool rev = false;
+        // namespace right
+    }  // namespace bucket
+}  // namespace servo_motor
 
 static constexpr std::string_view ps4_controller_mac = "90:38:0C:EB:09:F2";
 }  // namespace config

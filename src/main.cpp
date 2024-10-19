@@ -7,15 +7,12 @@
 #include "chassis_driver.hpp"
 #include "config.hpp"
 #include "servo_motor_driver.hpp"
+#include "arm_driver.hpp"
+
 
 /* Define */
-// #ifdef SERIAL_PORT_HARDWARE_OPEN
-// #define maestroSerial SERIAL_PORT_HARDWARE_OPEN
-// #else
-// #include <SoftwareSerial.h>
-// SoftwareSerial maestroSerial(0, 1);
-// #endif
-
+#include <SoftwareSerial.h>
+SoftwareSerial maestroSerial(0, 1);
 static const int indicator = 27;
 
 float left_duty = 0;
@@ -35,16 +32,19 @@ motor_driver::MotorDriver left_motor_driver(left_motor_config);
 
 chassis_driver::ChassisDriver chassis(left_motor_driver, right_motor_driver);
 
-// servo_motor_driver::ServoMotorConfig left_arm_config(config::left_arm_channel, config::servo_target_min,
-//                                                      config::servo_target_max, config::servo_target_neutral,
-//                                                      config::left_arm_target_offset, config::servo_range_deg);
-// servo_motor_driver::ServoMotorConfig right_arm_config(config::right_arm_channel, config::servo_target_min,
-//                                                       config::servo_target_max, config::servo_target_neutral,
-//                                                       config::right_arm_target_offset, config::servo_range_deg);
+servo_motor_driver::ServoMotorConfig left_arm_config(
+    config::servo_motor::left::channel, config::servo_motor::target_neutral,
+    config::servo_motor::left::target_offset, config::servo_motor::left::target_min,
+    config::servo_motor::left::target_max, config::servo_motor::deg_per_target, config::servo_motor::left::rev);
 
-// MicroMaestro maestro(maestroSerial);
-// servo_motor_driver::ServoMotorDriver left_arm_servo(maestro, left_arm_config);
-// servo_motor_driver::ServoMotorDriver right_arm_servo(maestro, right_arm_config);
+servo_motor_driver::ServoMotorConfig right_arm_config(
+    config::servo_motor::right::channel, config::servo_motor::target_neutral,
+    config::servo_motor::right::target_offset, config::servo_motor::right::target_min,
+    config::servo_motor::right::target_max, config::servo_motor::deg_per_target, config::servo_motor::right::rev);
+
+MicroMaestro maestro(maestroSerial);
+servo_motor_driver::ServoMotorDriver left_arm_servo(maestro, left_arm_config);
+servo_motor_driver::ServoMotorDriver right_arm_servo(maestro, right_arm_config);
 
 void setup() {
     Serial.begin(config::serial_baudrate);
@@ -77,8 +77,8 @@ void loop() {
         if (abs(R) <= 15) R = 0;
         if (abs(L) <= 15) L = 0;
 
-        float left_angle = static_cast<float>(config::servo_range_deg * L / INT8_MAX);
-        float right_angle = static_cast<float>(config::servo_range_deg * R / INT8_MAX);
+        float left_angle = static_cast<float>(config::servo_motor::servo_range_deg * L / INT8_MAX);
+        float right_angle = static_cast<float>(config::servo_motor::servo_range_deg * R / INT8_MAX);
 
         // left_arm_servo.degree(left_angle);
         // right_arm_servo.degree(right_angle);

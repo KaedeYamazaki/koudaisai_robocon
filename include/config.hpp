@@ -3,8 +3,6 @@
 #include <cstdint>
 #include <string>
 
-#define DEBUG true
-
 namespace config {
 static constexpr int serial_baudrate = 115200;
 
@@ -35,21 +33,21 @@ namespace servo_motor {
 
     static constexpr uint16_t servo_range_deg = 270;  // 0 to 270 degree
 
-    static constexpr float deg_per_target = servo_range_deg / (target_max - target_min);
+    static constexpr float deg_per_target = static_cast<float>(target_max - target_min) / (servo_range_deg);
 
-    static constexpr uint16_t target_neutral = 4 * 2000;
+    static constexpr uint16_t target_neutral = 4 * 1500;
 
     namespace left {
         static constexpr uint8_t channel = 0;
         static constexpr uint16_t target_min = 4 * 1100;
-        static constexpr uint16_t target_max = 4 * 2200;
+        static constexpr uint16_t target_max = target_neutral + 90 * deg_per_target;
         static constexpr int target_offset = 0;
         static constexpr bool rev = false;
     }  // namespace left
 
     namespace right {
         static constexpr uint8_t channel = 1;
-        static constexpr uint16_t target_min = 4 * 496;
+        static constexpr uint16_t target_min = target_neutral - 90 * deg_per_target;
         static constexpr uint16_t target_max = 4 * 1700;
         static constexpr int target_offset = 0;
         static constexpr bool rev = true;
@@ -63,6 +61,13 @@ namespace servo_motor {
         static constexpr bool rev = false;
         // namespace right
     }  // namespace bucket
+
+    namespace arm {
+        static constexpr float left_arm_close_angle = 270.f;
+        static constexpr float left_arm_open_angle = 0.f;
+        static constexpr float right_arm_close_angle = 270.f;
+        static constexpr float right_arm_open_angle = 0.f;
+    }  // namespace arm
 }  // namespace servo_motor
 
 static constexpr std::string_view ps4_controller_mac = "90:38:0C:EB:09:F2";

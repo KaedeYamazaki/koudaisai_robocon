@@ -32,15 +32,12 @@ public:
 
     int setup();
 
-    void rev(bool rev) { reversed_ = rev; }
-
     void degree(float degree);
 
 private:
     MicroMaestro &maestro_;
     const ServoMotorConfig config_;
-    bool reversed_{false};
-    float limit_target(uint32_t target) {
+    int limit_target(int target) {
         if (target > config_.target_max) {
             return config_.target_max;
         } else if (target < config_.target_min) {

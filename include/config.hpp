@@ -5,6 +5,7 @@
 
 namespace config {
 static constexpr int serial_baudrate = 115200;
+static constexpr std::string_view ps4_controller_mac = "90:38:0C:EB:09:F2";
 
 static constexpr uint8_t pwm_resulution_bit = 8;
 static constexpr uint32_t pwm_frequency = 490;
@@ -61,14 +62,18 @@ namespace servo_motor {
         static constexpr bool rev = false;
         // namespace right
     }  // namespace bucket
-
-    namespace arm {
-        static constexpr float left_arm_close_angle = 270.f;
-        static constexpr float left_arm_open_angle = 0.f;
-        static constexpr float right_arm_close_angle = 270.f;
-        static constexpr float right_arm_open_angle = 0.f;
-    }  // namespace arm
 }  // namespace servo_motor
 
-static constexpr std::string_view ps4_controller_mac = "90:38:0C:EB:09:F2";
+namespace arm {
+    static constexpr float left_arm_close_angle = 270.f;
+    static constexpr float left_arm_open_angle = 0.f;
+    static constexpr float right_arm_close_angle = 270.f;
+    static constexpr float right_arm_open_angle = 0.f;
+}  // namespace arm
+
+namespace bucket {
+    static constexpr float scoop_angle = -10.f;
+    static constexpr float lift_angle = 0.f;
+    static constexpr float turn_over_angle = 270.f;
+}  // namespace bucket
 }  // namespace config

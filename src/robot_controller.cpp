@@ -16,14 +16,14 @@ void RobotController::cycle() {
     if (PS4.isConnected()) {
         if (PS4.Options()) {
             Serial.println("set standby mode");
-            state_ == RobotState::standby;
+            state_ = RobotState::standby;
             return;
         }
         if (state_ == RobotState::setup) {
-            state_ == RobotState::standby;
-            Serial.println("setup to standby");
+            Serial.println("setup to standby mode");
             return;
-        } else if (state_ == RobotState::standby) {
+        }
+        if (state_ == RobotState::standby) {
             Serial.println("stand by mode");
             if (PS4.Square()) {
                 Serial.println("set semi auto mode");
@@ -37,14 +37,15 @@ void RobotController::cycle() {
             }
         }
         if (state_ == RobotState::semi_auto) {
+            Serial.println("semi auto mode");
             semi_auto();
             return;
         }
         if (state_ == RobotState::manual) {
+            Serial.println("manual mode");
             manual();
             return;
         }
-
     } else {
         Serial.println("controller not connected");
     }
@@ -63,6 +64,17 @@ void RobotController::semi_auto() {
     bool up = PS4.Up();
     bool down = PS4.Down();
 
+    Serial.print("L2: ");
+    Serial.print(L2);
+    Serial.print("  R2: ");
+    Serial.print(R2);
+    Serial.print("  left: ");
+    Serial.print(left);
+    Serial.print("  up: ");
+    Serial.print(up);
+    Serial.print("  down: ");
+    Serial.println(down);
+
     if (left) { robot_.bucket_lift(); }
     if (down) { robot_.bucket_scoop(); }
     if (up) { robot_.bucket_turn_over(); }
@@ -74,8 +86,8 @@ void RobotController::manual() {
     auto L2 = PS4.L2Value();
     auto R2 = PS4.R2Value();
 
-    float left_arm_angle = 270.f * static_cast<float>(L2 / INT8_MAX);
-    float right_arm_angle = 270.f * static_cast<float>(R2 / INT8_MAX);
+    float left_arm_angle = 270.f * static_cast<float>(L2) / INT8_MAX;
+    float right_arm_angle = 270.f * static_cast<float>(R2) / INT8_MAX;
 
     robot_.arm_degree(left_arm_angle, right_arm_angle);
 
@@ -92,6 +104,19 @@ void RobotController::manual() {
         bucket_value_count_ += 10;
         robot_.bucket_degree(static_cast<float>(bucket_value_count_));
     }
+
+    Serial.print("L2: ");
+    Serial.print(L2);
+    Serial.print("  R2: ");
+    Serial.print(R2);
+    Serial.print("  left: ");
+    Serial.print(left);
+    Serial.print("  up: ");
+    Serial.print(up);
+    Serial.print("  down: ");
+    Serial.print(down);
+    Serial.print("  bucket_value_count_: ");
+    Serial.println(bucket_value_count_);
 }
 
 void RobotController::drive() {
@@ -104,8 +129,8 @@ void RobotController::drive() {
     float left_duty;
     float right_duty;
 
-    left_duty = static_cast<float>(L / INT8_MAX);
-    right_duty = static_cast<float>(R / INT8_MAX);
+    left_duty = static_cast<float>(L) / INT8_MAX;
+    right_duty = static_cast<float>(R) / INT8_MAX;
 
     robot_.drive(left_duty, right_duty);
 }

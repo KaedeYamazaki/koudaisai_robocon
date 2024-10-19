@@ -29,7 +29,6 @@ public:
 
     void bucket_turn_over();
 
-private:
     chassis_driver::ChassisDriver &chassis_;
     arm::ArmDriver &arm_;
     bucket::Bucket &bucket_;

@@ -32,6 +32,8 @@ public:
 
     void open();
 
+    ArmConfig config() const { return config_; }
+
 private:
     servo_motor_driver::ServoMotorDriver &left_arm_servo_;
     servo_motor_driver::ServoMotorDriver &right_arm_servo_;

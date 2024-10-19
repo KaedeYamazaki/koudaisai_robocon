@@ -34,6 +34,8 @@ public:
 
     void degree(float degree);
 
+    ServoMotorConfig config() const { return config_; }
+
 private:
     MicroMaestro &maestro_;
     const ServoMotorConfig config_;

@@ -1,6 +1,8 @@
 
 #include "robot_controller.hpp"
 
+#include "config.hpp"
+
 namespace robot {
 RobotController::RobotController(const std::string &controller_mac, robot::Robot &robot, const uint8_t doi_led_pin)
     : controller_mac_(controller_mac),
@@ -93,8 +95,8 @@ void RobotController::manual() {
     auto L2 = PS4.L2Value();
     auto R2 = PS4.R2Value();
 
-    float left_arm_angle = 270.f * static_cast<float>(L2) / INT8_MAX;
-    float right_arm_angle = 270.f * static_cast<float>(R2) / INT8_MAX;
+    float left_arm_angle = config::servo_motor::servo_range_deg * static_cast<float>(L2) / INT8_MAX;
+    float right_arm_angle = config::servo_motor::servo_range_deg * static_cast<float>(R2) / INT8_MAX;
 
     robot_.arm_degree(left_arm_angle, right_arm_angle);
 
@@ -102,7 +104,10 @@ void RobotController::manual() {
     bool up = PS4.Up();
     bool down = PS4.Down();
 
-    if (left) { robot_.bucket_degree(0.f); }
+    if (left) {
+        bucket_value_count_ = 0;
+        robot_.bucket_degree(0.f);
+    }
     if (down) {
         bucket_value_count_ -= 10;
         robot_.bucket_degree(static_cast<float>(bucket_value_count_));

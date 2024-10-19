@@ -22,7 +22,7 @@ public:
     void scoop();
     void lift();
     void turn_over();
-    
+    BucketConfig config() const { return config_; }
 
 private:
     servo_motor_driver::ServoMotorDriver &bucket_servo_;

@@ -36,6 +36,8 @@ public:
 
     void brake();
 
+    MotorDriverConfig config() const { return config_; }
+
 private:
     const MotorDriverConfig config_;
     bool is_reversed_{false};

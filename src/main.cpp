@@ -67,75 +67,27 @@ bucket::BucketConfig bucket_config(config::bucket::scoop_angle, config::bucket::
 bucket::Bucket bucket_arm(bucket_servo, bucket_config);
 
 robot::Robot ibonoito(chassis, arm_driver, bucket_arm);
-robot::RobotController ibonoito_controller(static_cast<std::string>(config::ps4_controller_mac), ibonoito);
+robot::RobotController ibonoito_controller(static_cast<std::string>(config::serial::ps4_controller_mac), ibonoito);
 
 void setup() {
-    Serial.begin(config::serial_baudrate);
+    Serial.begin(config::serial::baudrate);
     Serial.println("start setup");
     Serial.println("setup maestro serial");
-    Serial1.begin(9600, SERIAL_8N1, 16, 17);
+    Serial1.begin(config::servo_motor::serial_baudrate, SERIAL_8N1, config::servo_motor::serial_rx,
+                  config::servo_motor::serial_tx);
 
     // setup
-    // chassis.setup();
-
+    Serial.println("setup robot");
     ibonoito_controller.setup();
 
     left_motor_driver.rev(config::left_motor_rev);
     right_motor_driver.rev(config::righr_motor_rev);
-
-    PS4.begin(config::ps4_controller_mac.data());
-
+    
     pinMode(indicator, OUTPUT);
     delay(100);
 }
 
 void loop() {
-    if (PS4.isConnected()) {
-        Serial.println("controller connected");
-        left_duty = float(PS4.LStickY()) / INT8_MAX;
-        right_duty = float(PS4.RStickY()) / INT8_MAX;
-        Serial.print("left duty: ");
-        Serial.println(left_duty);
-        Serial.print("right duty: ");
-        Serial.println(right_duty);
-        chassis.drive(left_duty, right_duty);
-        bool L2 = PS4.L2();
-        bool R2 = PS4.R2();
-
-        if (L2) { ibonoito.arm_close(); }
-        if (R2) { ibonoito.arm_open(); }
-
-        bool left = PS4.Left();
-        bool up = PS4.Up();
-        bool down = PS4.Down();
-
-        Serial.print("L2: ");
-        Serial.print(L2);
-        Serial.print("  R2: ");
-        Serial.print(R2);
-        Serial.print("  left: ");
-        Serial.print(left);
-        Serial.print("  up: ");
-        Serial.print(up);
-        Serial.print("  down: ");
-        Serial.println(down);
-
-        if (left) { ibonoito.bucket_lift(); }
-        if (down) { ibonoito.bucket_scoop(); }
-        if (up) { ibonoito.bucket_turn_over(); }
-    } else {
-        Serial.println("controller not connected");
-    }
-
-    // sleep(2000);
-    // Serial.println("90");
-    // ibonoito.arm_degree(90, 90);
-    // ibonoito.bucket_degree(90);
-    // sleep(2000);
-    // Serial.println("0");
-    // ibonoito.arm_degree(0, 0);
-    // ibonoito.bucket_degree(0);
-
-    // ibonoito_controller.cycle();
+    ibonoito_controller.cycle();
     delay(50);
 }

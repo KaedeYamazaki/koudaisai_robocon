@@ -4,8 +4,10 @@
 #include <string>
 
 namespace config {
-static constexpr int serial_baudrate = 115200;
-static constexpr std::string_view ps4_controller_mac = "90:38:0C:EB:09:F2";
+namespace serial {
+    static constexpr int baudrate = 115200;
+    static constexpr std::string_view ps4_controller_mac = "90:38:0C:EB:09:F2";
+}  // namespace serial
 
 static constexpr uint8_t pwm_resulution_bit = 8;
 static constexpr uint32_t pwm_frequency = 490;
@@ -29,6 +31,9 @@ static constexpr bool righr_motor_rev = true;
 static constexpr uint8_t doi_led_pin = 27;
 
 namespace servo_motor {
+    static constexpr uint16_t serial_baudrate = 9600;
+    static constexpr uint8_t serial_rx = 16;
+    static constexpr uint8_t serial_tx = 17;
     static constexpr uint16_t target_min = 4 * 500;
     static constexpr uint16_t target_max = 4 * 2500;
 

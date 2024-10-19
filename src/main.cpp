@@ -18,13 +18,25 @@
 #define DEBUG false
 
 // motor setup
-motor_driver::MotorDriverConfig right_motor_config(config::pwm_resulution_bit, config::pwm_frequency,
-                                                   config::right_motor_pwm_controller_channel,
-                                                   config::right_motor_pwm_pin, config::right_motor_in1_pin,
-                                                   config::right_motor_in2_pin);
-motor_driver::MotorDriverConfig left_motor_config(config::pwm_resulution_bit, config::pwm_frequency,
-                                                  config::left_motor_pwm_controller_channel, config::left_motor_pwm_pin,
-                                                  config::left_motor_in1_pin, config::left_motor_in2_pin);
+motor_driver::MotorDriverConfig left_motor_config(config::motor::pwm_resulution_bit, config::motor::pwm_frequency,
+                                                  config::motor::left_motor_pwm_controller_channel,
+                                                  config::motor::left_motor_pwm_pin, config::motor::left_motor_in1_pin,
+                                                  config::motor::left_motor_in2_pin);
+
+motor_driver::MotorDriverConfig right_motor_config(config::motor::pwm_resulution_bit, config::motor::pwm_frequency,
+                                                   config::motor::right_motor_pwm_controller_channel,
+                                                   config::motor::right_motor_pwm_pin,
+                                                   config::motor::right_motor_in1_pin,
+                                                   config::motor::right_motor_in2_pin);
+
+// motor_driver::MotorDriverConfig right_motor_config(config::pwm_resulution_bit, config::pwm_frequency,
+//                                                    config::right_motor_pwm_controller_channel,
+//                                                    config::right_motor_pwm_pin, config::right_motor_in1_pin,
+//                                                    config::right_motor_in2_pin);
+// motor_driver::MotorDriverConfig left_motor_config(config::pwm_resulution_bit, config::pwm_frequency,
+//                                                   config::left_motor_pwm_controller_channel,
+//                                                   config::left_motor_pwm_pin, config::left_motor_in1_pin,
+//                                                   config::left_motor_in2_pin);
 
 motor_driver::MotorDriver right_motor_driver(right_motor_config);
 motor_driver::MotorDriver left_motor_driver(left_motor_config);
@@ -75,8 +87,8 @@ void setup() {
     Serial.println("setup robot");
     ibonoito_controller.setup();
 
-    left_motor_driver.rev(config::left_motor_rev);
-    right_motor_driver.rev(config::righr_motor_rev);
+    left_motor_driver.rev(config::motor::left_motor_rev);
+    right_motor_driver.rev(config::motor::righr_motor_rev);
 
     delay(100);
 }

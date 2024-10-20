@@ -146,8 +146,8 @@ void RobotController::drive() {
         left_duty = slow_down_ * (static_cast<float>(L) / INT8_MAX);
         right_duty = slow_down_ * (static_cast<float>(R) / INT8_MAX);
     } else {
-        left_duty = slow_down_ * (static_cast<float>(L) / INT8_MAX);
-        right_duty = slow_down_ * (static_cast<float>(R) / INT8_MAX);
+        left_duty = (static_cast<float>(L) / INT8_MAX);
+        right_duty = (static_cast<float>(R) / INT8_MAX);
     }
 
     robot_.drive(left_duty, right_duty);

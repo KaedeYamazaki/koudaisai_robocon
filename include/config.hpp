@@ -81,7 +81,7 @@ namespace arm {
 
 namespace bucket {
     static constexpr float scoop_angle = -10.f;
-    static constexpr float lift_angle = 30.f;
+    static constexpr float lift_angle = 60.f;
     static constexpr float turn_over_angle = 270.f;
 }  // namespace bucket
 }  // namespace config
